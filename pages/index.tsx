@@ -2,6 +2,10 @@
 // import { GetStaticProps } from 'next';
 // import { Button, Link } from '@monorepo/ui-components';
 
+interface UserProps {
+  user: User;
+}
+
 interface User {
   avatar_url: string;
   name: string;
@@ -9,19 +13,20 @@ interface User {
   bio: string;
 }
 
-import { useState, useEffect } from "react";
-export function Index() {
-  const [user, setUser] = useState<User>();
+import { GetServerSideProps } from "next";
+// import { useState, useEffect } from "react";
+export function Index({ user }: UserProps) {
+  // const [user, setUser] = useState<User>();
 
-  async function getUserGithub() {
-    const response = await fetch("https://api.github.com/users/joaopavila");
-    const data = await response.json();
-    setUser(data);
-  }
+  // async function getUserGithub() {
+  //   const response = await fetch("https://api.github.com/users/joaopavila");
+  //   const data = await response.json();
+  //   setUser(data);
+  // }
 
-  useEffect(() => {
-    getUserGithub();
-  }, [setUser]);
+  // useEffect(() => {
+  //   getUserGithub();
+  // }, [setUser]);
 
   return user ? (
     <div>
@@ -38,15 +43,15 @@ export function Index() {
   ) : null;
 }
 
-// export const getStaticProps: GetStaticProps = async () => {
-//   const response = await fetch('https://api.github.com/users/joaopavila');
-//   const data = await response.json();
+export const getServerSideProps: GetServerSideProps = async () => {
+  const response = await fetch("https://api.github.com/users/joaopavila");
+  const data = await response.json();
 
-//   return {
-//     props: {
-//       user: data,
-//     },
-//   };
-// };
+  return {
+    props: {
+      user: data,
+    },
+  };
+};
 
 export default Index;
